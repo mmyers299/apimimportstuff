@@ -1,0 +1,48 @@
+parameters:
+  env: ''
+  azureServiceArm: ''
+  appName: ''
+  deployRegion: ''
+  subscription: ''
+  rgEnv: ''
+  dependsOn: []
+
+jobs:
+- deployment: Apim_Import_${{parameters.deployRegion}}
+  environment: ${{parameters.env}}
+  displayName: Import API Definition ${{parameters.deployRegion}}
+  dependsOn: ${{parameters.dependsOn}}
+  variables: 
+  - group: ${{parameters.env}}
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - checkout: self
+          path: 'Pipelines/Scripts'
+        - task: AzureCLI@2
+          displayName: API Management - Import API
+          inputs:
+            azureSubscription: ${{ parameters.azureServiceArm }}
+            scriptType: pscore
+            scriptLocation: scriptPath
+            scriptPath: '$(System.DefaultWorkingDirectory)/Pipelines/Scripts/apim_import.ps1'
+            arguments: >
+              -apimApiId $(apimApiId)
+              -apiPath $(apiPath)
+              -apimResourceGroupName $(apimResourceGroupName)
+              -apimServiceName $(apimServiceName)
+              -apiDisplayName $(apiDisplayName)
+              -apiServiceUrl $(apiServiceUrl)
+              -apiSpecificationFormat $(apiSpecificationFormat)
+              -apiSpecificationUrl $(apiSpecificationUrl)
+              -apiProtocols $(apiProtocols)
+              -subscriptionKeyName $(subscriptionKeyName)
+              -subscriptionKeyParamName $(subscriptionKeyParamName)
+              -subscriptionRequired $(subscriptionRequired)
+              -productName $(productName)
+              -productDescription $(productDescription)
+              -productState $(productState)
+              -apiVersion $(apiVersion)
+              -env $(env)
+              -dir '$(System.DefaultWorkingDirectory)/Pipelines/apim_policies'

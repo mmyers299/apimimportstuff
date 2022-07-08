@@ -1,0 +1,7 @@
+{    
+    "properties": {        
+        "method": "PUT",        
+        "value": "<policies><inbound><base /><validate-jwt header-name='Authorization' failed-validation-httpcode='401' failed-validation-error-message='Unauthorized. Access token is missing or invalid.'><openid-config url='https://login.microsoftonline.com/58a33605-8ca3-4790-bc86-3a683e928a9e/v2.0/.well-known/openid-configuration' /><audiences><audience>06ab2f96-2cd1-4630-bc47-38085729d348</audience></audiences></validate-jwt><set-backend-service base-url='https://fn-devqa-dev-jobs-api-centralus.azurewebsites.net/api' /><set-query-parameter name='apiVersion' exists-action='override'><value>1</value></set-query-parameter></inbound><backend><base /></backend><outbound><set-header name='X-Powered-by' exists-action='delete' /><set-header name='X-AspNet-Version' exists-action='delete' /><redirect-content-urls /><base /></outbound><on-error><base /></on-error></policies>",        
+        "format": "rawxml"    
+    }
+}
