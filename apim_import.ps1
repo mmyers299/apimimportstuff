@@ -56,16 +56,16 @@ Write-Host  "[IMPORT] Imported API $apiName : $api"
 Start-Sleep -Seconds 10
 
 Write-Host "[PRODUCT] Looking up product"
-$productId = az apim product list -g $apimResourceGroupName -n $apimServiceName --query "[?displayName=='$productName'].id" --output tsv
+$productId = az apim product list -g $apimResourceGroupName -n $apimServiceName --query "[?displayName=='$productName'].name" --output tsv
 if($null -eq $productId){
     Write-Host "[PRODUCT] Product not found creating new product "
     az apim product create -g $apimResourceGroupName -n $apimServiceName --product-name $productName
-    $productId = az apim product list -g $apimResourceGroupName -n $apimServiceName --query "[?displayName=='$productName'].id"
+    $productId = az apim product list -g $apimResourceGroupName -n $apimServiceName --query "[?displayName=='$productName'].name"
     Write-Host "[PRODUCT] Created new product $productName id = $product"
 }
 
 Write-Host "[PRODUCT] Adding product $productName with the id $productId to the API $apiDisplayName $apiVersion that has the id $apiId"
-az apim product api add --api-id $apimApiId --product-id $productName -g $apimResourceGroupName -n $apimServiceName
+az apim product api add --api-id $apimApiId --product-id $productId -g $apimResourceGroupName -n $apimServiceName
 
 Write-Host "[ACCOUNT] querying subscription ID"
 $subId = az account show --query id --output tsv
